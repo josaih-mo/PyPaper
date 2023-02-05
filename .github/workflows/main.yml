@@ -29,7 +29,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: gui_version
-        path: dist\main
+        path: D:\a\PyPaper\PyPaper\dist\main
 
     - name: Build Main exe
       run: |
@@ -41,6 +41,6 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: console_version
-        path: dist\main
+        path: D:\a\PyPaper\PyPaper\dist\main
 
     
