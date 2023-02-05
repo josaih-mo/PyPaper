@@ -1,32 +1,39 @@
-name: Package exe with PyInstaller - Windows
+name: Build and Deploy
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: push
+
+env:
+  PYINSTALLER_COMMAND: "pip install pyinstaller"
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: PyInstaller Windows
-      uses: JackMcKew/pyinstaller-action-windows@main
-      with:
-        path: gui
-    - name: PyInstaller Windows
-      uses: JackMcKew/pyinstaller-action-windows@main
-      with:
-        path: main
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    - uses: actions/upload-artifact@v2
+    - name: Setup Python environment
+      uses: actions/setup-python@v2
       with:
-        name: gui
-        path: gui/dist/windows
-    - uses: actions/upload-artifact@v2
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: ${{ env.PYINSTALLER_COMMAND }}
+
+    - name: Build GUI exe
+      run: pyinstaller "gui/main.py" --onefile
+
+    - name: Build Main exe
+      run: pyinstaller "main/main.py" --onefile
+
+    - name: Upload artifact - GUI version
+      uses: actions/upload-artifact@v2
       with:
-        name: main
-        path: main/dist/windows
+        name: exe-files
+        path: gui/dist
+    - name: Upload artifact - Main version
+      uses: actions/upload-artifact@v2
+      with:
+        name: exe-files
+        path: main/dist
