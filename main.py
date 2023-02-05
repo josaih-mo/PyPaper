@@ -8,11 +8,11 @@ try:
     with open("pyPaper.json") as settingsRaw:
         settings = json.load(settingsRaw)
         paths1 = os.path.dirname(__file__) or '.'
-        path = paths1 + "\\" + settings['RelativePyPaperPath']
+        path = settings['PyPaperPath']
         frames = 0
         try:
             for i,file in enumerate(os.listdir(path)):
-                if file.endswith(".png"):
+                if file.endswith(".jpg") or file.endswith(".jpeg") or file.endswith(".png"):
                     frames += 1
             if frames > 1:
                 print("PyPaper has frames!")
@@ -25,7 +25,7 @@ try:
 except FileNotFoundError:
     print("PyPaper has no settings JSON!")
     settingsRaw = {
-        "RelativePyPaperPath": input("What is the RELATIVE path to your PyPaper, not including \".\\\"? >").replace("\\", "\\\\")
+        "PyPaperPath": input("What is the EXACT path to your PyPaper? >").replace("\\", "\\\\")
     }
     settings = json.dumps(settingsRaw, indent=4)
     with open("pyPaper.json", "w") as pyPaper:
@@ -33,14 +33,9 @@ except FileNotFoundError:
         print("Please run PyPaper again!")
 
 if (plsCont):
-    frames = 0
     fps = float(input("What is your desired FPS? >"))
-    frameNames = input("What is the name of your frames (not including the number of frames, e.g. if you passed Frame, we'd use Frame1, Frame2, and etc.)")
+    images = [os.path.join(path, file) for file in os.listdir(path) if file.endswith(".jpg") or file.endswith(".jpeg") or file.endswith(".png")]
     while True:
-        for i,file in enumerate(os.listdir(path)):
-                if file.endswith(".png"):
-                    frames += 1
-                    ctypes.windll.user32.SystemParametersInfoW(20, 0, path + "\\" + frameNames  + str(frames) + ".png", 0)
-                    print(path + frameNames + str(frames))
-                    time.sleep(fps)
-        frames = 0
+        for image in images:
+            ctypes.windll.user32.SystemParametersInfoW(20, 0, image, 0)
+            time.sleep(1/fps)
