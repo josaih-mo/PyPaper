@@ -23,24 +23,24 @@ jobs:
 
     - name: Build GUI exe
       run: |
-            pyinstaller "gui/main.py" --onefile
+            pyinstaller "gui\main.py" --onefile
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: gui_version
-        path: dist/main
+        path: dist\main
 
     - name: Build Main exe
       run: |
-            rm -f -r build
-            rm -f -r dist 
-            pyinstaller "main/main.py" --onefile
+            rm -Force -r build
+            rm -Force -r dist 
+            pyinstaller "main\main.py" --onefile
     
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: console_version
-        path: dist/main
+        path: dist\main
 
     
