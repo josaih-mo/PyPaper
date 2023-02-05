@@ -22,18 +22,17 @@ jobs:
       run: ${{ env.PYINSTALLER_COMMAND }}
 
     - name: Build GUI exe
-      run: pyinstaller "gui/main.py" --onefile
+      run: |
+            pyinstaller "gui/main.py" --onefile
+            mv dist/main/main.exe dist/main/gui.exe
 
     - name: Build Main exe
-      run: pyinstaller "main/main.py" --onefile
+      run: |
+            pyinstaller "main/main.py" --onefile
+            mv dist/main/main.exe dist/main/console.exe
 
-    - name: Upload artifact - GUI version
+    - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: exe-files
-        path: gui/dist
-    - name: Upload artifact - Main version
-      uses: actions/upload-artifact@v2
-      with:
-        name: exe-files
-        path: main/dist
+        path: dist/main
